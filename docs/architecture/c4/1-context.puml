@@ -1,0 +1,20 @@
+@startuml C4_Context
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(user, "Usuário", "Pessoa que acessa dados de vitivinicultura")
+
+System_Boundary(sistema, "Sistema de Dados Vitivinícolas") {
+    System(webapp, "Frontend React/Next.js", "Interface web para visualizar dados")
+    System(monolith, "Serviço de Vitivinicultura (API + Scraper)", "Python (FastAPI + Scrapy)", "Coleta dados da Embrapa e expõe via API REST")
+    SystemDb(database, "Banco de Dados", "Armazena os dados estruturados")
+}
+
+System_Ext(embrapa, "Portal da Embrapa", "Fonte de dados públicos de vitivinicultura")
+
+Rel(user, webapp, "Acessa")
+Rel(webapp, monolith, "Consome API REST")
+Rel(monolith, database, "Lê e grava dados")
+Rel(monolith, embrapa, "Raspagem de dados")
+
+SHOW_LEGEND()
+@enduml

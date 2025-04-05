@@ -1,0 +1,23 @@
+@startuml C4_Container
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Usuário", "Pessoa que acessa dados de vitivinicultura")
+
+System_Boundary(sistema, "Sistema de Dados Vitivinícolas") {
+
+    Container(webapp, "Frontend (React/Next.js)", "JavaScript", "Interface web acessada pelo usuário")
+
+    Container(service, "Serviço de Vitivinicultura", "Python (FastAPI + Scrapy)", "Expõe dados via REST e coleta dados do site da Embrapa")
+
+    ContainerDb(db, "Banco de Dados", "PostgreSQL", "Armazena dados raspados e processados")
+}
+
+System_Ext(embrapa, "Portal da Embrapa", "Fonte pública de dados de vitivinicultura")
+
+Rel(user, webapp, "Acessa via navegador")
+Rel(webapp, service, "Faz requisições HTTP à API REST")
+Rel(service, db, "Lê e grava dados")
+Rel(service, embrapa, "Faz scraping de dados")
+
+SHOW_LEGEND()
+@enduml
