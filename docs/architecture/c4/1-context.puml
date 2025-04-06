@@ -1,20 +1,22 @@
 @startuml C4_Context
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-Person(user, "Usuário", "Pessoa que acessa dados de vitivinicultura")
+Person(user, "Usuário", "Pessoa que acessa dados de vitivinicultura via interface web")
 
 System_Boundary(sistema, "Sistema de Dados Vitivinícolas") {
-    System(webapp, "Frontend React/Next.js", "Interface web para visualizar dados")
-    System(monolith, "Serviço de Vitivinicultura (API + Scraper)", "Python (FastAPI + Scrapy)", "Coleta dados da Embrapa e expõe via API REST")
-    SystemDb(database, "Banco de Dados", "Armazena os dados estruturados")
+    System(webapp, "tc-frontend (React)", "Interface web para visualização e consulta de dados da API")
+    System(api, "tc-backend (Flask API)", "Exposição de dados estruturados em API REST")
+    System(scraper, "Scraper EMBRAPA", "Módulo que extrai dados de vitivinicultura da Embrapa")
+    SystemDb(database, "Banco de Dados", "Armazena dados coletados")
 }
 
-System_Ext(embrapa, "Portal da Embrapa", "Fonte de dados públicos de vitivinicultura")
+System_Ext(embrapa, "Portal da Embrapa", "Fonte pública de dados sobre vitivinicultura")
 
-Rel(user, webapp, "Acessa")
-Rel(webapp, monolith, "Consome API REST")
-Rel(monolith, database, "Lê e grava dados")
-Rel(monolith, embrapa, "Raspagem de dados")
+Rel(user, webapp, "Consulta dados e interage com")
+Rel(webapp, api, "Faz requisições HTTP para")
+Rel(api, database, "Lê e grava")
+Rel(api, scraper, "Dispara coletas periódicas de")
+Rel(scraper, embrapa, "Raspa dados de")
 
 SHOW_LEGEND()
 @enduml
