@@ -30,4 +30,4 @@ jobs:
 
       - name: Rodar Pylint
         run: |
-          pylint . --exit-zero
+          pylint .
