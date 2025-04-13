@@ -6,11 +6,13 @@ from app.domain.services.production_service import ProductionService
 from app.domain.vo.product_filter import Filter
 
 
+# Namespace definition
 ns = Namespace(
     "production",
     description="Produção de vinhos, sucos e derivados do Rio Grande do Sul",
 )
 
+# Model definition for API response
 model = ns.model(
     "Model",
     {
@@ -24,6 +26,8 @@ model = ns.model(
         "year": fields.Integer,
     },
 )
+
+# Request parser for query parameters
 parser = reqparse.RequestParser()
 parser.add_argument("category", type=str, required=False, help="Filter by category")
 parser.add_argument(
@@ -31,18 +35,26 @@ parser.add_argument(
 )
 
 
+# Factory function to create the service
+def get_production_service():
+    repo = ProductionEmbrapaScraper()
+    return ProductionService(repo)
+
+
+# Resource definition
 @ns.route("")
-class ProductResource(Resource):
+class ProductionResource(Resource):
     @ns.expect(parser)
     @ns.marshal_with(model, as_list=True, code=200)
     def get(self):
+        # Parse query parameters
         args = parser.parse_args()
-        year = args.get("year")
-        category = args.get("category")
+        year = args.get("year", 2023)
+        category = args.get("category", None)
+
+        # Create filter and service
         product_filter = Filter(category=category)
+        service = get_production_service()
 
-        repo = ProductionEmbrapaScraper()
-        service = ProductionService(repo)
-        products = service.get_all_products(year=year, product_filter=product_filter)
-
-        return products
+        # Fetch and return products
+        return service.get_all_products(year=year, product_filter=product_filter)
