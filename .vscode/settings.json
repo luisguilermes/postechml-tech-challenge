@@ -1,0 +1,9 @@
+{
+  "pylint.cwd": "${workspaceFolder}/tc-backend",
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/tc-backend/.venv/lib/python3.8/site-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/tc-backend/.venv/lib/python3.8/site-packages"
+  ],
+}

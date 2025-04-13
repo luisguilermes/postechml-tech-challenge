@@ -1,0 +1,39 @@
+name: Lint and Test (tc-backend)
+
+on:
+  pull_request:
+    paths:
+      - 'tc-backend/**'
+  push:
+    paths:
+      - 'tc-backend/**'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: tc-backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pylint
+        run: |
+          pylint .
+
+      - name: Run Pytest
+        run: |
+          pytest --cov=app --cov-report=term-missing --cov-fail-under=80
