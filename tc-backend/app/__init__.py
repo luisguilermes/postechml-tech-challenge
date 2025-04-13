@@ -1,6 +1,5 @@
+from app.entrypoint.rest.routes import register_routes
 from flask import Flask
-
-from app.adapters.web.routes import register_routes
 
 
 def create_app():
