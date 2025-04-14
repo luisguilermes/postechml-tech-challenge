@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "tc-backend",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/tc-backend/run.py",
+       "envFile": "${workspaceFolder}/tc-backend/.env",
+      "console": "integratedTerminal",
+      "python": "${workspaceFolder}/.venv/bin/python"
+    }
+  ]
+}
