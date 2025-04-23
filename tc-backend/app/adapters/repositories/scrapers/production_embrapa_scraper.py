@@ -62,6 +62,16 @@ class ProductionEmbrapaScraper(ProductionRepository):
             td = cols[0]
             if "tb_item" in td.get("class", []):
                 category = td.text.strip()
+                amount = self._parse_amount(cols[1].text.strip())
+                data.append(
+                    self._create_product_entry(
+                        category=category,
+                        sub_category=" - ",
+                        amount=amount,
+                        year=year,
+                        collected_at=collected_at,
+                    )
+                )
             elif "tb_subitem" in td.get("class", []):
                 sub_category = td.text.strip()
                 amount = self._parse_amount(cols[1].text.strip())
