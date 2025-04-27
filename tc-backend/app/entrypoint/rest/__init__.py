@@ -1,6 +1,6 @@
 from flask_restx import Api
-from app.entrypoint.rest.product_routes import register_product_resource, get_production_service, get_processing_service
-
+from .production_routes import ns as production_ns
+from .processing_routes import ns as processing_ns
 
 def register_routes(app):
     api = Api(
@@ -9,18 +9,5 @@ def register_routes(app):
         title="Dados da Vitivinicultura",
         description="API com Dados da Vitivinicultura",
     )
-    api.add_namespace(
-        register_product_resource(
-            "/api/v1/products/production",
-            "Produção de vinhos, sucos e derivados do Rio Grande do Sul",
-            get_production_service,
-        )
-    )
-
-    api.add_namespace(
-        register_product_resource(
-            "/api/v1/products/processing",
-            "Processamento de vinhos, sucos e derivados do Rio Grande do Sul",
-            get_processing_service,
-        )
-    )
+    api.add_namespace(production_ns, path="/api/v1/production")
+    api.add_namespace(processing_ns, path="/api/v1/processing")
