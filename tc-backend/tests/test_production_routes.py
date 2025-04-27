@@ -2,7 +2,7 @@ from unittest.mock import patch, MagicMock
 from tests.helper.product_filter_matcher import ProductFilterMatcher
 
 
-@patch("app.entrypoint.rest.production_routes.get_production_service")
+@patch("app.entrypoint.rest.product_routes.get_production_service")
 def test_get_production_resource(mock_get_production_service, client):
     """Test the GET method of the ProductionResource."""
     # Mock the service response
@@ -22,7 +22,7 @@ def test_get_production_resource(mock_get_production_service, client):
     mock_get_production_service.return_value = mock_service
 
     # Perform the GET request
-    response = client.get("/api/v1/production?year=2023&category=Wine")
+    response = client.get("/api/v1/products/production?year=2023&category=Wine")
 
     # Assertions
     assert response.status_code == 200

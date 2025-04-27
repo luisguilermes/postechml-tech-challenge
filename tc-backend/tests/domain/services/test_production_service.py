@@ -1,13 +1,13 @@
 from unittest.mock import MagicMock
 import pytest
 from app.domain.services.production_service import ProductionService
-from app.domain.repositories.production_repository import ProductionRepository
+from app.domain.repositories.base_repository import BaseRepository
 from app.domain.vo.product_filter import Filter
 
 
 @pytest.fixture
 def mock_production_repository():
-    return MagicMock(spec=ProductionRepository)
+    return MagicMock(spec=BaseRepository)
 
 
 @pytest.fixture

@@ -1,9 +1,9 @@
-from app.domain.repositories.processing_repository import ProcessingRepository
+from app.domain.repositories.base_repository import BaseRepository
 from app.domain.vo.product_filter import Filter
 
 
 class ProcessingService:
-    def __init__(self, processing_repository: ProcessingRepository):
+    def __init__(self, processing_repository: BaseRepository):
         self.processing_repository = processing_repository
 
     def get_all_products(self, year: int, product_filter: Filter = None):
