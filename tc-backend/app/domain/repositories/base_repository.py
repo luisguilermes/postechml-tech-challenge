@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ProductionRepository(ABC):
+class BaseRepository(ABC):
     @abstractmethod
     def fetch_all(self, year: int):
         pass
