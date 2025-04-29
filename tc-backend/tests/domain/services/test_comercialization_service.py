@@ -1,0 +1,50 @@
+from unittest.mock import MagicMock
+import pytest
+from app.domain.services.comercialization_service import ComercializationService
+from app.domain.repositories.comercialization_repository import ComercializationRepository
+from app.domain.vo.product_filter import Filter
+
+
+@pytest.fixture
+def mock_production_repository():
+    return MagicMock(spec=ComercializationRepository)
+
+
+@pytest.fixture
+def comercialization_service(mock_comercialization_repository):
+    return ComercializationService(ComercializationRepository=mock_comercialization_repository)
+
+
+def test_get_all_products_without_filter(
+    comercialization_service, mock_comercialization_repository
+):
+    # Arrange
+    year = 2023
+    mock_products = [{"id": 1, "name": "Product A"}, {"id": 2, "name": "Product B"}]
+    mock_comercialization_repository.fetch_all.return_value = mock_products
+
+    # Act
+    result = comercialization_service.get_all_products(year=year)
+
+    # Assert
+    mock_comercialization_repository.fetch_all.assert_called_once_with(year=year)
+    assert result == mock_products
+
+
+def test_get_all_products_with_filter(comercialization_service, mock_comercialization_repository):
+    # Arrange
+    year = 2023
+    mock_products = [{"id": 1, "name": "Product A"}, {"id": 2, "name": "Product B"}]
+    filtered_products = [{"id": 1, "name": "Product A"}]
+    mock_comercialization_repository.fetch_all.return_value = mock_products
+
+    mock_filter = MagicMock(spec=Filter)
+    mock_filter.apply.return_value = filtered_products
+
+    # Act
+    result = comercialization_service.get_all_products(year=year, product_filter=mock_filter)
+
+    # Assert
+    mock_comercialization_repository.fetch_all.assert_called_once_with(year=year)
+    mock_filter.apply.assert_called_once_with(mock_products)
+    assert result == filtered_products
