@@ -1,18 +1,18 @@
 from unittest.mock import MagicMock
 import pytest
 from app.domain.services.comercialization_service import ComercializationService
-from app.domain.repositories.comercialization_repository import ComercializationRepository
+from app.domain.repositories.base_repository import BaseRepository
 from app.domain.vo.product_filter import Filter
 
 
 @pytest.fixture
 def mock_production_repository():
-    return MagicMock(spec=ComercializationRepository)
+    return MagicMock(spec=BaseRepository)
 
 
 @pytest.fixture
 def comercialization_service(mock_comercialization_repository):
-    return ComercializationService(ComercializationRepository=mock_comercialization_repository)
+    return ComercializationService(BaseRepository=mock_comercialization_repository)
 
 
 def test_get_all_products_without_filter(
