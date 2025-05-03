@@ -1,10 +1,7 @@
 from flask_restx import Api
-
 from .production_routes import ns as production_ns
 from .processing_routes import ns as processing_ns
 from .importing_routes import ns as importing_ns
-
-
 
 def register_routes(app):
     api = Api(
