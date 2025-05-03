@@ -1,33 +1,66 @@
-from typing import List, Dict
+from typing import List
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 import requests
-import re
-from app.domain.entities.product import Product
+from app.domain.entities.importing import Importing
+from app.domain.entities.category import Category
 from app.domain.repositories.importing_repository import ImportingRepository
-from app.util.hash_generator_util import generate_hash
 
 # Constantes
 BASE_URL = "http://vitibrasil.cnpuv.embrapa.br/index.php"
-DEFAULT_UNIT = "liters"
+AMOUNT_UNIT = "Kg"
+VALUE_UNIT = "US$"
 SOURCE = "Embrapa/Vitivinicultura"
 TABLE_CLASS = "tb_base"
-OPT = 1
-
 
 class ImportingEmbrapaScraper(ImportingRepository):
-    def fetch_all(self, start_year: int = 1970, end_year: int = 2024) -> List[Product]:
+    def fetch_all_categories(self) -> List[Category]:
+        """
+        Busca todas as categorias de importação da Embrapa.
+        """
+        url = f"{BASE_URL}?opcao=opt_05"
+        response = self._fetch_page(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        return self._fetch_categories(soup)
+
+    def fetch_imports_by_category(self, start_year: int, end_year: int, category: str) \
+            -> List[Importing]:
         """
         Busca todos os dados de importação da Embrapa no intervalo de anos especificado.
         """
         all_data = []
         for year in range(start_year, end_year + 1):
-            url = f"{BASE_URL}?ano={year}&opcao=opt_05&subopcao=subopt_0{OPT}"
+            url = f"{BASE_URL}?ano={year}&opcao=opt_05&subopcao={category}"
             response = self._fetch_page(url)
             soup = BeautifulSoup(response.text, "html.parser")
+            category_name = next(
+                map(lambda c: c.name, filter(
+                    lambda c: c.id == category, self._fetch_categories(soup))
+                ),
+                None
+            )
+            if category_name is None:
+                raise ValueError("Categoria com id 'id_desejado' não encontrada")
             table = soup.find("tbody")
             if table:
-                all_data.extend(self._parse_table(table, year))
+                all_data.extend(self._parse_table(table, year, category_name))
+        return all_data
+
+    def _fetch_categories(self, bs: BeautifulSoup) -> List[Category]:
+        all_data = []
+        buttons = bs.findAll("button", attrs={"class": "btn_sopt"})
+        if buttons:
+            collected_at = datetime.now(timezone.utc)
+            for button in buttons:
+                category_id = button.get("value")
+                all_data.append(
+                    Category(
+                        id=category_id,
+                        name=button.next.strip(),
+                        source=SOURCE,
+                        collected_at=collected_at
+                    )
+                )
         return all_data
 
     def _fetch_page(self, url: str) -> requests.Response:
@@ -42,7 +75,7 @@ class ImportingEmbrapaScraper(ImportingRepository):
         except requests.exceptions.RequestException as e:
             raise RuntimeError(f"Erro ao buscar dados da Embrapa: {e}") from e
 
-    def _parse_table(self, tbody: BeautifulSoup, year: int) -> List[Dict]:
+    def _parse_table(self, tbody: BeautifulSoup, year: int, category_data: str) -> List[Importing]:
         """
         Faz o parsing da tabela de importações.
         """
@@ -57,44 +90,30 @@ class ImportingEmbrapaScraper(ImportingRepository):
                 continue
 
             country, quantity, dollar = group
+            if country == "Total":
+                continue
             data.append(
-                self._create_import_entry(
+                Importing(
+                    category=category_data,
                     country=country,
-                    quantity=quantity,
-                    dollar=dollar,
-                    year=year,
+                    amount=self._parse_number(quantity),
+                    amount_unit=AMOUNT_UNIT,
+                    value=self._parse_number(dollar),
+                    value_unit=VALUE_UNIT,
+                    source=SOURCE,
                     collected_at=collected_at,
+                    year=year
                 )
             )
         return data
 
-    def _create_import_entry(
-        self,
-        country: str,
-        quantity: str,
-        dollar: str,
-        year: int,
-        collected_at: datetime,
-    ) -> Dict:
-        """
-        Cria o dicionário de importação.
-        """
-        return {
-            "id": generate_hash([country, str(year)]),
-            "country": country,
-            "quantity": self._parse_amount(quantity),
-            "dollar": self._parse_amount(dollar),
-            "unit": DEFAULT_UNIT,
-            "year": year,
-            "source": SOURCE,
-            "collected_at": collected_at,
-        }
-
-    def _parse_amount(self, value: str) -> float:
+    def _parse_number(self, value: str) -> float:
         """
         Converte o valor em string para float.
         """
         try:
-            return float(value.replace(".", "").replace(",", ".")) if value not in ["-", ""] else 0.0
+            return float(
+                value.replace(".", "").replace(",", ".")
+            ) if value not in ["-", ""] else 0.0
         except ValueError:
             return 0.0

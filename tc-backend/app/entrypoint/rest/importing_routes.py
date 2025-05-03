@@ -3,7 +3,6 @@ from app.adapters.repositories.scrapers.importing_embrapa_scraper import (
     ImportingEmbrapaScraper,
 )
 from app.domain.services.importing_service import ImportingService
-from app.domain.vo.product2_filter import Filter
 
 
 # Namespace definition
@@ -13,13 +12,25 @@ ns = Namespace(
 )
 
 # Model definition for API response
-model = ns.model(
-    "Model",
+category_model = ns.model(
+    "CategoryModel",
     {
         "id": fields.String,
+        "name": fields.String,
+        "source": fields.String,
+        "collected_at": fields.DateTime,
+    },
+)
+
+model = ns.model(
+    "ImportingModel",
+    {
+        "category": fields.String,
         "country": fields.String,
-        "quantity": fields.Integer,
-        "dollar": fields.Float,
+        "amount": fields.Float,
+        "amount_unit": fields.String,
+        "value": fields.Float,
+        "value_unit": fields.String,
         "source": fields.String,
         "collected_at": fields.DateTime,
         "year": fields.Integer,
@@ -28,9 +39,11 @@ model = ns.model(
 
 # Request parser for query parameters
 parser = reqparse.RequestParser()
-parser.add_argument("country", type=str, required=False, help="Filter by country")
 parser.add_argument(
-    "year", type=int, required=False, help="Filter by year", default=2024
+"start_year", type=int, required=False, help="Filter by start_year", default=2024
+)
+parser.add_argument(
+    "end_year", type=int, required=False, help="Filter by end_year", default=2024
 )
 
 
@@ -41,19 +54,31 @@ def get_importing_service():
 
 
 # Resource definition
-@ns.route("")
-class ImportingResource(Resource):
-    @ns.expect(parser)
-    @ns.marshal_with(model, as_list=True, code=200)
+@ns.route("/categories")
+class CategoriesResource(Resource):
+    @ns.marshal_with(category_model, as_list=True, code=200)
     def get(self):
+        service = get_importing_service()
+        # Fetch and return products
+        return service.get_all_categories()
+
+
+@ns.route("/categories/<string:category>")
+class CategoryResource(Resource):
+    @ns.expect(parser)
+    @ns.marshal_with(model, code=200)
+    def get(self, category):
         # Parse query parameters
         args = parser.parse_args()
-        year = args.get("year", 2024)
-        country = args.get("country", None)
+        start_year = args.get("start_year", 2024)
+        end_year = args.get("end_year", 2024)
 
         # Create filter and service
-        product_filter = Filter(country=country)
         service = get_importing_service()
 
-        # Fetch and return products
-        return service.get_all_products(year=year, product_filter=product_filter)
+        # Fetch and return products for the specific category
+        return service.get_imports_by_category(
+            category=category,
+            start_year=start_year,
+            end_year=end_year
+        )
