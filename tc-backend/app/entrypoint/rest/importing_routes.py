@@ -66,11 +66,11 @@ class CategoriesResource(Resource):
         return service.get_all_categories()
 
 
-@ns.route("/categories/<string:category>")
+@ns.route("/categories/<string:category_id>")
 class CategoryResource(Resource):
     @ns.expect(parser)
     @ns.marshal_with(model, code=200)
-    def get(self, category):
+    def get(self, category_id: str):
         # Parse query parameters
         args = parser.parse_args()
         country = args.get("country", None)
@@ -83,7 +83,7 @@ class CategoryResource(Resource):
 
         # Fetch and return products for the specific category
         return service.get_imports_by_category(
-            category=category,
+            category=category_id,
             start_year=start_year,
             end_year=end_year,
             importing_filter=importing_filter,
