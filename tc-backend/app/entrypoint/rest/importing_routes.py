@@ -3,7 +3,7 @@ from app.adapters.repositories.scrapers.importing_embrapa_scraper import (
     ImportingEmbrapaScraper,
 )
 from app.domain.services.importing_service import ImportingService
-
+from app.domain.vo.importing_filter import ImportingFilter
 
 # Namespace definition
 ns = Namespace(
@@ -45,6 +45,9 @@ parser.add_argument(
 parser.add_argument(
     "end_year", type=int, required=False, help="Filter by end_year", default=2024
 )
+parser.add_argument(
+    "country", type=str, required=False, help="Filter by country", default=None
+)
 
 
 # Factory function to create the service
@@ -70,15 +73,18 @@ class CategoryResource(Resource):
     def get(self, category):
         # Parse query parameters
         args = parser.parse_args()
+        country = args.get("country", None)
         start_year = args.get("start_year", 2024)
         end_year = args.get("end_year", 2024)
 
         # Create filter and service
+        importing_filter = ImportingFilter(country=country)
         service = get_importing_service()
 
         # Fetch and return products for the specific category
         return service.get_imports_by_category(
             category=category,
             start_year=start_year,
-            end_year=end_year
+            end_year=end_year,
+            importing_filter=importing_filter,
         )
