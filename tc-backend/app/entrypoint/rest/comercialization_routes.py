@@ -54,7 +54,7 @@ class ComercializationResource(Resource):
 
         # Create filter and service
         product_filter = Filter(category=category)
-        service = get_production_service()
+        service = get_comercialization_service()
 
         # Fetch and return products
         return service.get_all_products(year=year, product_filter=product_filter)
