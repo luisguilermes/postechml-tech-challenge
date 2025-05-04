@@ -36,7 +36,7 @@ parser.add_argument(
 
 
 # Factory function to create the service
-def get_production_service():
+def get_comercialization_service():
     repo = ComercializationEmbrapaScraper()
     return ComercializationService(repo)
 
