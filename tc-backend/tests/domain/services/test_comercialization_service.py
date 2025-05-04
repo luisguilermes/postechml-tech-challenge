@@ -6,7 +6,7 @@ from app.domain.vo.product_filter import Filter
 
 
 @pytest.fixture
-def mock_production_repository():
+def mock_comercialization_repository():
     return MagicMock(spec=BaseRepository)
 
 
