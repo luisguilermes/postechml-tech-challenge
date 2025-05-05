@@ -1,22 +1,33 @@
 @startuml C4_Context
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-Person(user, "Usuário", "Pessoa que acessa dados de vitivinicultura via interface web")
+title Diagrama de Contexto - Plataforma SaaS de Dados e Previsão Vitivinícola
 
-System_Boundary(sistema, "Sistema de Dados Vitivinícolas") {
-    System(webapp, "tc-frontend (React)", "Interface web para visualização e consulta de dados da API")
-    System(api, "tc-backend (Flask API)", "Exposição de dados estruturados em API REST")
-    System(scraper, "Scraper EMBRAPA", "Módulo que extrai dados de vitivinicultura da Embrapa")
-    SystemDb(database, "Banco de Dados", "Armazena dados coletados")
+' Pessoas
+Person(user, "Usuário", "Pessoa que acessa dados e previsões sobre vitivinicultura via interface web")
+
+' Sistemas internos
+System_Boundary(sistema, "Sistema SaaS de Vitivinicultura") {
+    System(webapp, "tc-frontend (React)", "Interface web para visualização de dados e previsões")
+    System(api, "tc-backend (Flask API)", "API REST que expõe dados históricos e previsões")
+    System(scraper, "Scraper EMBRAPA", "Extrai dados da Embrapa sobre vitivinicultura")
+    System(ml_api, "Serviço de Previsão (ML)", "API com modelo de machine learning para prever produção e comércio")
+    SystemDb(database, "Banco de Dados", "Armazena dados históricos e resultados de previsão")
 }
 
+' Sistema externo
 System_Ext(embrapa, "Portal da Embrapa", "Fonte pública de dados sobre vitivinicultura")
 
-Rel(user, webapp, "Consulta dados e interage com")
+' Relações
+Rel(user, webapp, "Consulta dados e previsões através de")
 Rel(webapp, api, "Faz requisições HTTP para")
-Rel(api, database, "Lê e grava")
-Rel(api, scraper, "Dispara coletas periódicas de")
+Rel(api, database, "Lê e grava dados")
+Rel(api, scraper, "Dispara coletas de")
 Rel(scraper, embrapa, "Raspa dados de")
+Rel(scraper, database, "Armazena dados coletados em")
+Rel(api, ml_api, "Envia dados para previsão")
+Rel(ml_api, database, "Consulta dados históricos para gerar previsões")
+Rel(user, ml_api, "Consulta previsões específicas através da interface", "HTTPS")
 
 SHOW_LEGEND()
 @enduml
