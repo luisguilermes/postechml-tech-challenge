@@ -35,22 +35,22 @@ Este repositório contém duas aplicações principais:
 
 ### Backend (`tc-backend`)
 
-- 🔍 Coleta automatizada de dados de:
-  - Produção de uvas
-  - Processamento
-  - Comercialização
-  - Importação e Exportação
-- 🔧 API RESTful para acesso estruturado aos dados
-- 🔮 Geração de previsões usando modelos de ML
-- 🧠 Armazenamento de previsões e dados históricos no banco
-- 🔐 (Opcional) Autenticação com JWT
-- 📄 Documentação interativa via Swagger/OpenAPI
+- ✅ Coleta automatizada de dados de:
+  - ✅ Produção de uvas
+  - ✅ Processamento
+  - ✅ Comercialização
+  - ✅ Importação e Exportação
+- ✅ API RESTful para acesso estruturado aos dados
+- ✅ Documentação interativa via Swagger/OpenAPI
+- ⚙️ [Em desenvolvimento] Geração de previsões usando modelos de ML
+- ⚙️ [Em desenvolvimento] Armazenamento de previsões e dados históricos no banco
+- 🔐 [Planejado] Autenticação com JWT
 
 ### Frontend (`tc-frontend`)
 
-- 📊 Visualização de dados históricos e previsões
-- 🕹️ Interação com filtros e categorias (região, tipo de uva, ano, etc.)
-- 📈 Gráficos comparativos com séries temporais
+- 🔐 [Planejado] Visualização de dados históricos e previsões
+- 🔐 [Planejado] Interação com filtros e categorias (região, tipo de uva, ano, etc.)
+- 🔐 [Planejado] Gráficos comparativos com séries temporais
 
 ---
 
