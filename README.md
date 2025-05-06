@@ -114,7 +114,7 @@ O sistema é composto por:
 ```bash
 cd tc-backend
 python -m venv venv
-source venv/bin/activate  # no Windows: venv\Scripts\activate
+source venv/bin/activate  # no Windows: venv\Scripts\activate.bat
 pip install -r requirements.txt
 flask run
 ```
