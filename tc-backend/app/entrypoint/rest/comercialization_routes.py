@@ -31,7 +31,7 @@ model = ns.model(
 parser = reqparse.RequestParser()
 parser.add_argument("category", type=str, required=False, help="Filter by category")
 parser.add_argument(
-    "year", type=int, required=False, help="Filter by year", default=2023
+    "year", type=int, required=True, choices=list(range(1970, 2024)), help="Choose between 1970 e 2023."
 )
 
 
