@@ -40,7 +40,7 @@ model = ns.model(
 # Request parser for query parameters
 parser = reqparse.RequestParser()
 parser.add_argument(
-"start_year", type=int, required=False, help="Filter by start_year", default=2024
+    "start_year", type=int, required=False, help="Filter by start_year", default=2024
 )
 parser.add_argument(
     "end_year", type=int, required=False, help="Filter by end_year", default=2024

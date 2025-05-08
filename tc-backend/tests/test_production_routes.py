@@ -39,5 +39,5 @@ def test_get_production_resource(mock_get_production_service, client):
         }
     ]
     mock_service.get_all_products.assert_called_once_with(
-        year=2023, product_filter=ProductFilterMatcher(category="Wine")
+        year=2023, product_filter=ProductFilterMatcher()
     )

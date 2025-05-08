@@ -27,11 +27,23 @@ model = ns.model(
     },
 )
 
+
+sub_option = {
+    'Viníferas': 'subopt_01',
+    'Americanas e híbridas': 'subopt_02',
+    'Uvas de mesa': 'subopt_03',
+    'Sem classificação': 'subopt_04'
+}
+
+
 # Request parser for query parameters
 parser = reqparse.RequestParser()
-parser.add_argument("category", type=str, required=False, help="Filter by category")
+# parser.add_argument("category", type=str, required=False, help="Filter by category")
+parser.add_argument("suboption", type=str, choices=list(sub_option.keys()), 
+                    required=False, default='Viníferas', 
+                    help="Escolha uma subopção para filtrar os resultados.")
 parser.add_argument(
-    "year", type=int, required=True, choices=list(range(1970, 2024)), help="Choose between 1970 e 2023."
+    "year", type=int, required=False, default=2023, choices=list(range(1970, 2024)), help="Escolha entre os anos 1970 e 2023."
 )
 
 
@@ -50,11 +62,14 @@ class ProcessingResource(Resource):
         # Parse query parameters
         args = parser.parse_args()
         year = args.get("year", 2023)
-        category = args.get("category", None)
+        sub_amigavel = args.get("suboption")
+        suboption = sub_option.get(sub_amigavel)
+        #category = args.get("category", None)
 
         # Create filter and service
-        product_filter = Filter(category=category)
+        product_filter = Filter()
         service = get_processing_service()
 
         # Fetch and return products
-        return service.get_all_products(year=year, product_filter=product_filter)
+        #return service.get_all_products(year=year, product_filter=product_filter)
+        return service.get_all_products(year=year, suboption=suboption, product_filter=product_filter)
