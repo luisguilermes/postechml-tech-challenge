@@ -14,7 +14,7 @@ ns = Namespace(
 
 # Model definition for API response
 model = ns.model(
-    "Model",
+    "ComercializationModel",
     {
         "id": fields.String,
         "amount": fields.Float,
