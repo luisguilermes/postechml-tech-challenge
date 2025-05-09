@@ -5,7 +5,7 @@ from app.domain.entities.product import Product
 from app.domain.repositories.base_repository import BaseRepository
 
 class ProcessingEmbrapaScraper(EmbrapaBaseScraper, BaseRepository):
-    def __init__(self, suboption: int = 1):
+    def __init__(self, suboption: str = "subopt_01"):
         self.suboption = suboption
 
     def fetch_all(self, year: int, suboption: str) -> List[Product]:
