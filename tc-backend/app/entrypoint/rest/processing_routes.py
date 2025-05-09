@@ -43,7 +43,12 @@ parser.add_argument("suboption", type=str, choices=list(sub_option.keys()),
                     required=False, default='Viníferas', 
                     help="Escolha uma subopção para filtrar os resultados.")
 parser.add_argument(
-    "year", type=int, required=False, default=2023, choices=list(range(1970, 2024)), help="Escolha entre os anos 1970 e 2023."
+    "year", 
+    type=int, 
+    required=False, 
+    default=2023, 
+    choices=list(range(1970, 2024)), 
+    help="Escolha entre os anos 1970 e 2023."
 )
 
 
