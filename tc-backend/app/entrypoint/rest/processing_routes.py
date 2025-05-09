@@ -39,15 +39,15 @@ sub_option = {
 # Request parser for query parameters
 parser = reqparse.RequestParser()
 # parser.add_argument("category", type=str, required=False, help="Filter by category")
-parser.add_argument("suboption", type=str, choices=list(sub_option.keys()), 
-                    required=False, default='Viníferas', 
+parser.add_argument("suboption", type=str, choices=list(sub_option.keys()),
+                    required=False, default='Viníferas',
                     help="Escolha uma subopção para filtrar os resultados.")
 parser.add_argument(
-    "year", 
-    type=int, 
-    required=False, 
-    default=2023, 
-    choices=list(range(1970, 2024)), 
+    "year",
+    type=int,
+    required=False,
+    default=2023,
+    choices=list(range(1970, 2024)),
     help="Escolha entre os anos 1970 e 2023."
 )
 
@@ -77,4 +77,6 @@ class ProcessingResource(Resource):
 
         # Fetch and return products
         #return service.get_all_products(year=year, product_filter=product_filter)
-        return service.get_all_products(year=year, suboption=suboption, product_filter=product_filter)
+        return service.get_all_products(year=year,
+                                        suboption=suboption,
+                                        product_filter=product_filter)
