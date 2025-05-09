@@ -44,7 +44,9 @@ def test_get_all_products_with_filter(processing_service, mock_processing_reposi
     mock_filter.apply.return_value = filtered_products
 
     # Act
-    result = processing_service.get_all_products(year=year, suboption=suboption, product_filter=mock_filter)
+    result = processing_service.get_all_products(year=year,
+                                                 suboption=suboption,
+                                                 product_filter=mock_filter)
 
     # Assert
     mock_processing_repository.fetch_all.assert_called_once_with(year=year, suboption=suboption)
