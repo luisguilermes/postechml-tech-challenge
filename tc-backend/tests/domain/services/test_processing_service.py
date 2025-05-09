@@ -20,22 +20,22 @@ def test_get_all_products_without_filter(
 ):
     # Arrange
     year = 2023
-    suboption = "subopt_01"
+    sub_option = "subopt_01"
     mock_products = [{"id": 1, "name": "Product A"}, {"id": 2, "name": "Product B"}]
     mock_processing_repository.fetch_all.return_value = mock_products
 
     # Act
-    result = processing_service.get_all_products(year=year, suboption=suboption)
+    result = processing_service.get_all_products(year=year, sub_option=sub_option)
 
     # Assert
-    mock_processing_repository.fetch_all.assert_called_once_with(year=year, suboption=suboption)
+    mock_processing_repository.fetch_all.assert_called_once_with(year=year, sub_option=sub_option)
     assert result == mock_products
 
 
 def test_get_all_products_with_filter(processing_service, mock_processing_repository):
     # Arrange
     year = 2023
-    suboption = "subopt_01"
+    sub_option = "subopt_01"
     mock_products = [{"id": 1, "name": "Product A"}, {"id": 2, "name": "Product B"}]
     filtered_products = [{"id": 1, "name": "Product A"}]
     mock_processing_repository.fetch_all.return_value = mock_products
@@ -45,10 +45,10 @@ def test_get_all_products_with_filter(processing_service, mock_processing_reposi
 
     # Act
     result = processing_service.get_all_products(year=year,
-                                                 suboption=suboption,
+                                                 sub_option=sub_option,
                                                  product_filter=mock_filter)
 
     # Assert
-    mock_processing_repository.fetch_all.assert_called_once_with(year=year, suboption=suboption)
+    mock_processing_repository.fetch_all.assert_called_once_with(year=year, sub_option=sub_option)
     mock_filter.apply.assert_called_once_with(mock_products)
     assert result == filtered_products

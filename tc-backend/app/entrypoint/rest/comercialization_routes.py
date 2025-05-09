@@ -29,7 +29,6 @@ model = ns.model(
 
 # Request parser for query parameters
 parser = reqparse.RequestParser()
-# parser.add_argument("category", type=str, required=False, help="Filter by category")
 parser.add_argument(
     "year",
     type=int,
@@ -55,10 +54,8 @@ class ComercializationResource(Resource):
         # Parse query parameters
         args = parser.parse_args()
         year = args.get("year", 2023)
-        # category = args.get("category", None)
 
         # Create filter and service
-        # product_filter = Filter(category=category)
         product_filter = Filter()
         service = get_comercialization_service()
 

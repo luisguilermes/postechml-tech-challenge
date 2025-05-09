@@ -22,7 +22,7 @@ def test_get_processing_resource(mock_get_processing_service, client):
     mock_get_processing_service.return_value = mock_service
 
     # Perform the GET request
-    response = client.get("/api/v1/processing?suboption=Vin%C3%ADferas&year=2023")
+    response = client.get("/api/v1/processing?subopcao=Vin%C3%ADferas&year=2023")
 
     # Assertions
     assert response.status_code == 200
@@ -39,5 +39,5 @@ def test_get_processing_resource(mock_get_processing_service, client):
         }
     ]
     mock_service.get_all_products.assert_called_once_with(
-        suboption="subopt_01", year=2023, product_filter=ProductFilterMatcher()
+        sub_option="subopt_01", year=2023, product_filter=ProductFilterMatcher()
     )
