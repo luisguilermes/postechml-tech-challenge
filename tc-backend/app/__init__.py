@@ -9,7 +9,6 @@ from app.api.v1.auth_router import router as auth_router
 from app.api.v1.production_router import router as production_router
 from app.core.config import settings
 from app.core.logging_config import setup_logging
-from app.util.auth_util import decode_token
 
 
 def custom_openapi(app: FastAPI):

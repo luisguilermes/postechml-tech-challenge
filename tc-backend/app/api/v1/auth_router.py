@@ -30,7 +30,7 @@ def refresh_token(
         return AuthResponse(
             access_token=auth.access_token, refresh_token=auth.refresh_token
         )
-    except JWTError as e:
+    except JWTError:
         raise HTTPException(status_code=403, detail="Invalid refresh token")
     except NotFoundException as e:
         raise HTTPException(status_code=401, detail=e.message)

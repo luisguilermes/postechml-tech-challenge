@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./tc-backend.db"
 
     embrapa_url: str = "http://vitibrasil.cnpuv.embrapa.br/index.php"
-    embrapa_connection_timeout: int = 1  #  segundos pra conectar
+    embrapa_connection_timeout: int = 1  # segundos pra conectar
     embrapa_read_timeout: int = 2  # segundos pra ler a resposta
 
     class Config:

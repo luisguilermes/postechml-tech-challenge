@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 import requests
