@@ -3,9 +3,9 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 import requests
 
+from app.core.config import settings
 from app.domain.production import Production
 
-BASE_URL = "http://vitibrasil.cnpuv.embrapa.br/index.php"
 TABLE_CLASS = "tb_base tb_dados"
 DEFAULT_UNIT = "liters"
 SOURCE = "Embrapa/Vitivinicultura"
@@ -40,9 +40,10 @@ def _parse_amount(amount: str) -> float:
         return 0.0
 
 
-def _fetch_page(url: str) -> requests.Response:
+def _fetch_page(path: str) -> requests.Response:
     try:
-        response = requests.get(url, timeout=10)
+        timeout = (settings.embrapa_connection_timeout, settings.embrapa_read_timeout)
+        response = requests.get(f"{settings.embrapa_url}?{path}", timeout=timeout)
         response.encoding = "utf-8"
         response.raise_for_status()
         return response

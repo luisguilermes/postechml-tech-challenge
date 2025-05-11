@@ -1,6 +1,5 @@
 from unittest.mock import patch, MagicMock
-import pytest
-from app.adapters.repositories.scrapers.processing_embrapa_scraper import ProcessingEmbrapaScraper
+from app.adapters.scrapers.production_embrapa_scraper import fetch_production_embrapa
 
 # Mock constants
 MOCK_HTML = """
@@ -18,13 +17,8 @@ MOCK_HTML = """
 """
 
 
-@pytest.fixture
-def scraper():
-    return ProcessingEmbrapaScraper()
-
-
 @patch("requests.get")
-def test_fetch_all(mock_get, scraper):
+def test_fetch_all(mock_get):
     # Mock the HTTP response
     mock_response = MagicMock()
     mock_response.text = MOCK_HTML
@@ -33,13 +27,17 @@ def test_fetch_all(mock_get, scraper):
 
     # Call the method
     year = 2023
-    products = scraper.fetch_all(year)
+    products = fetch_production_embrapa(year)
 
     # Assertions
     assert len(products) == 2
-    assert products[0]["category"] == "Category 1"
-    assert products[0]["sub_category"] == "Subcategory 1"
-    assert products[0]["amount"] == 1000.0
-    assert products[0]["year"] == year
-    assert products[1]["sub_category"] == "Subcategory 2"
-    assert products[1]["amount"] == 2500.0
+    production1 = next(
+        filter(lambda p: p.sub_category == "Subcategory 1", products), None
+    )
+    assert production1.category == "Category 1"
+    assert production1.amount == 1000.0
+    production2 = next(
+        filter(lambda p: p.sub_category == "Subcategory 2", products), None
+    )
+    assert production2.year == year
+    assert production2.amount == 2500.0

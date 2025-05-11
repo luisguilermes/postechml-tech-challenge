@@ -2,6 +2,9 @@ from typing import List
 
 from pydantic_settings import BaseSettings
 
+# Defina o arquivo .env dinamicamente antes da definição da classe
+env_file_path = ".env"
+
 
 class Settings(BaseSettings):
     app_name: str = "FTM Backend App"
@@ -9,7 +12,7 @@ class Settings(BaseSettings):
     env: str = "development"
     port: int = 8000
 
-    jwt_secret_key: str
+    jwt_secret_key: str = "your_jwt_secret_key"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
@@ -18,8 +21,12 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./tc-backend.db"
 
+    embrapa_url: str = "http://vitibrasil.cnpuv.embrapa.br/index.php"
+    embrapa_connection_timeout: int = 1  #  segundos pra conectar
+    embrapa_read_timeout: int = 2  # segundos pra ler a resposta
+
     class Config:
-        env_file = ".env"
+        env_file = env_file_path
 
 
 settings = Settings()

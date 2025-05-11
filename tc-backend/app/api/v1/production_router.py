@@ -1,7 +1,6 @@
-from http.client import HTTPException
 from typing import Optional
 
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException
 from fastapi.params import Query
 
 from app.api.config.doc_errors import unauthorized_response

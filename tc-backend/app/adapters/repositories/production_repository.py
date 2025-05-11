@@ -28,21 +28,25 @@ class ProductionRepositoryIml(ProductionRepository):
             return self._fetch_by_year_from_db(year)
 
     def _upsert_production(self, year: int, data: List[Production]) -> None:
+        new_data = list(map(_update_source, data))
+
         # Tenta encontrar o registro existente
-        production_moddel = (
+        production_model = (
             self.db.query(ProductionModel).filter(ProductionModel.year == year).first()
         )
 
-        if production_moddel:
+        if production_model:
             # Atualiza os dados
-            production_moddel.data = data
+            production_model.data = json.dumps([p.to_dict() for p in new_data])
         else:
             # Cria novo
-            production_moddel = ProductionModel(year=year, data=json.dumps(data))
-            self.db.add(production_moddel)
+            production_model = ProductionModel(
+                year=year, data=json.dumps([p.to_dict() for p in new_data])
+            )
+            self.db.add(production_model)
 
         self.db.commit()
-        self.db.refresh(production_moddel)
+        self.db.refresh(production_model)
 
     def _fetch_by_year_from_db(self, year: int) -> List[Production]:
         production_year = (
@@ -56,4 +60,10 @@ class ProductionRepositoryIml(ProductionRepository):
                 status_code=503,
                 detail="Serviço externo indisponível no momento. Tente novamente mais tarde.",
             )
-        return json.loads(production_year.data)
+        return production_year.from_dict()
+
+
+def _update_source(p: Production) -> Production:
+    """Update the source of the production data"""
+    p.source = "DB/Fallback"
+    return p
