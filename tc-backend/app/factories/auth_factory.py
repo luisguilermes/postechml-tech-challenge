@@ -1,4 +1,4 @@
-from app.factories.user import get_user_repository
+from app.factories.user_factory import get_user_repository
 from app.use_cases.auth_usecase import AuthUseCase
 
 

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from app.core.config import settings
-from app.domain.production import Production
+from app.models.product import Product
 
 TABLE_CLASS = "tb_base tb_dados"
 DEFAULT_UNIT = "liters"
@@ -17,8 +17,8 @@ def _create_production_entry(
     amount: float,
     year: int,
     collected_at: datetime,
-) -> Production:
-    return Production(
+) -> Product:
+    return Product(
         amount=amount,
         unit=DEFAULT_UNIT,
         year=year,
@@ -51,7 +51,7 @@ def _fetch_page(path: str) -> requests.Response:
         raise RuntimeError(f"Failed to fetch data from Embrapa: {e}") from e
 
 
-def _parse_table(table: BeautifulSoup, year: int) -> List[Production]:
+def _parse_table(table: BeautifulSoup, year: int) -> List[Product]:
     data = []
     collected_at = datetime.now(timezone.utc)
     current_category = None

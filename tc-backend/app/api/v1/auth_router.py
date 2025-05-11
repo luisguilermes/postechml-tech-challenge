@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from jose import JWTError
 
-from app.api.config.doc_errors import unauthorized_response
+from app.api.docs.errors import unauthorized_response
 from app.api.v1.dto.auth_dtos import AuthResponse, LoginInput, RefreshRequest
-from app.factories.auth import get_auth_use_case
+from app.factories.auth_factory import get_auth_use_case
 from app.models.exception import NotFoundException
 from app.use_cases.auth_usecase import AuthUseCase
 

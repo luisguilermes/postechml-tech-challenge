@@ -8,8 +8,8 @@ from app.adapters.database.database import Base
 from app.models.product import Product
 
 
-class ProductionModel(Base):
-    __tablename__ = "tc_production"
+class CommercializationModel(Base):
+    __tablename__ = "tc_commercialization"
 
     year = Column(Integer, primary_key=True)
     data = Column(JSON)

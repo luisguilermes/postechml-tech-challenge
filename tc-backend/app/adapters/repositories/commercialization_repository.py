@@ -5,24 +5,26 @@ from typing import List
 from fastapi import BackgroundTasks, HTTPException
 from sqlalchemy.orm import Session
 
-from app.adapters.database.production_model import ProductionModel
-from app.adapters.scrapers.production_embrapa_scraper import fetch_production_embrapa
+from app.adapters.database.commercialization_model import CommercializationModel
+from app.adapters.scrapers.commercialization_embrapa_scraper import (
+    fetch_commercialization_embrapa,
+)
 from app.models.product import Product
-from app.interfaces.repository import ProductionRepository
+from app.interfaces.repository import CommercializationRepository
 
 
-class ProductionRepositoryIml(ProductionRepository):
+class CommercializationRepositoryIml(CommercializationRepository):
     def __init__(self, db: Session, background_tasks: BackgroundTasks):
         self.db = db
         self.background_tasks = background_tasks
         self.logger = logging.getLogger(__name__)
 
     def fetch_by_year(self, year: int) -> List[Product]:
-        """Get production data by year"""
+        """Get commercialization data by year"""
         try:
-            productions = fetch_production_embrapa(year)
-            self.background_tasks.add_task(self._upsert_production, year, productions)
-            return productions
+            products = fetch_commercialization_embrapa(year)
+            self.background_tasks.add_task(self._upsert_production, year, products)
+            return products
         except Exception as e:
             self.logger.error(e)
             return self._fetch_by_year_from_db(year)
@@ -31,30 +33,34 @@ class ProductionRepositoryIml(ProductionRepository):
         new_data = list(map(_update_source, data))
 
         # Tenta encontrar o registro existente
-        production_model = (
-            self.db.query(ProductionModel).filter(ProductionModel.year == year).first()
+        commercialization_model = (
+            self.db.query(CommercializationModel)
+            .filter(CommercializationModel.year == year)
+            .first()
         )
 
-        if production_model:
+        if commercialization_model:
             # Atualiza os dados
-            production_model.data = json.dumps([p.to_dict() for p in new_data])
+            commercialization_model.data = json.dumps([p.to_dict() for p in new_data])
         else:
             # Cria novo
-            production_model = ProductionModel(
+            commercialization_model = CommercializationModel(
                 year=year, data=json.dumps([p.to_dict() for p in new_data])
             )
-            self.db.add(production_model)
+            self.db.add(commercialization_model)
 
         self.db.commit()
-        self.db.refresh(production_model)
+        self.db.refresh(commercialization_model)
 
     def _fetch_by_year_from_db(self, year: int) -> List[Product]:
         production_year = (
-            self.db.query(ProductionModel).filter(ProductionModel.year == year).first()
+            self.db.query(CommercializationModel)
+            .filter(CommercializationModel.year == year)
+            .first()
         )
         if not production_year:
             self.logger.error(
-                f"The fallback to the database has not yet loaded the production data for the year {year}"
+                f"O fallback para o banco de dados ainda não carregou os dados de comercialização do ano {year}"
             )
             raise HTTPException(
                 status_code=503,

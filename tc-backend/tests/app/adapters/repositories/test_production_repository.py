@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from fastapi import HTTPException
 
 from app.adapters.repositories.production_repository import ProductionRepositoryIml
-from app.domain.production import Production
+from app.models.product import Product
 
 
 @patch("app.adapters.repositories.production_repository.fetch_production_embrapa")
@@ -14,7 +14,7 @@ def test_fetch_by_year_returns_production_data_on_success(
     mock_fetch_from_db, mock_fetch_embrapa
 ):
     mock_fetch_embrapa.return_value = [
-        Production(
+        Product(
             amount=1000.0,
             unit="kg",
             category="Category 1",
@@ -43,7 +43,7 @@ def test_fetch_by_year_falls_back_to_db_on_exception(
 ):
     mock_fetch_embrapa.side_effect = Exception("API error")
     mock_fetch_from_db.return_value = [
-        Production(
+        Product(
             amount=1000.0,
             unit="kg",
             category="Category 1",
@@ -86,7 +86,7 @@ def test_upsert_production_updates_existing_record(mock_production_model):
     repo._upsert_production(
         2023,
         [
-            Production(
+            Product(
                 amount=1000.0,
                 unit="kg",
                 category="Category 1",

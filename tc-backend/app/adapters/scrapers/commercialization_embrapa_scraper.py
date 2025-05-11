@@ -9,8 +9,8 @@ from app.adapters.scrapers.base_embrapa_scraper import (
 from app.models.product import Product
 
 
-def fetch_production_embrapa(year: int) -> List[Product]:
-    url = f"ano={year}&opcao=opt_02"
+def fetch_commercialization_embrapa(year: int) -> List[Product]:
+    url = f"ano={year}&opcao=opt_04"
     response = _fetch_page(url)
     soup = BeautifulSoup(response.text, "html.parser")
     table = _find_table(soup)

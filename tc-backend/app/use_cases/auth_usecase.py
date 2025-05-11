@@ -40,7 +40,7 @@ class AuthUseCase:
     def authenticate_user(self, username: str, password: str) -> AuthToken:
         user = self.repo.get_by_username(username)
         if not user or not _verify_password(password, user["hashed_password"]):
-            raise NotFoundException(self.error_message)
+            raise NotFoundException(status_code=401, detail=self.error_message)
         access_token = _create_access_token({"sub": user["username"]})
         refresh_token = _create_refresh_token({"sub": user["username"]})
         return AuthToken(access_token=access_token, refresh_token=refresh_token)
@@ -54,7 +54,7 @@ class AuthUseCase:
         username = payload.get("sub")
         user = self.repo.get_by_username(username)
         if not user:
-            raise NotFoundException(self.error_message)
+            raise NotFoundException(status_code=401, detail=self.error_message)
         access_token = _create_access_token({"sub": user["username"]})
         refresh_token = _create_refresh_token({"sub": user["username"]})
         return AuthToken(access_token=access_token, refresh_token=refresh_token)

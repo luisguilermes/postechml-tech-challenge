@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import List
 
-from app.domain.production import Production
+from app.models.product import Product
 
 
 class UserRepository(ABC):
@@ -13,6 +13,13 @@ class UserRepository(ABC):
 
 class ProductionRepository(ABC):
     @abstractmethod
-    def fetch_by_year(self, year: int) -> List[Production]:
+    def fetch_by_year(self, year: int) -> List[Product]:
         """Get production data"""
+        pass
+
+
+class CommercializationRepository(ABC):
+    @abstractmethod
+    def fetch_by_year(self, year: int) -> List[Product]:
+        """Get commercialization data"""
         pass
