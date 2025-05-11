@@ -2,7 +2,6 @@ from unittest.mock import MagicMock
 from jose import jwt
 
 from app.core.config import settings
-from app.models.exception import NotFoundException
 from app.use_cases.auth_usecase import AuthUseCase
 from app.util.auth_util import pwd_context
 
