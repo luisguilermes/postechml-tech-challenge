@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import List
 
+from app.models.category import Category
 from app.models.product import Product
 
 
@@ -22,4 +23,11 @@ class CommercializationRepository(ABC):
     @abstractmethod
     def fetch_by_year(self, year: int) -> List[Product]:
         """Get commercialization data"""
+        pass
+
+
+class ImportingRepository(ABC):
+    @abstractmethod
+    def fetch_categories(self) -> List[Category]:
+        """Get categories"""
         pass
