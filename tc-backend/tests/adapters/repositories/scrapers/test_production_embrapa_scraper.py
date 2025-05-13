@@ -35,8 +35,7 @@ def test_fetch_all(mock_get, scraper):
 
     # Call the method
     year = 2023
-    sub_option = "subopt_01"
-    products = scraper.fetch_all(year, sub_option)
+    products = scraper.fetch_all(year)
 
     # Assertions
     assert len(products) == 2

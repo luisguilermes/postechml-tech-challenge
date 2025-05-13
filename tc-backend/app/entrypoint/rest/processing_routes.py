@@ -28,19 +28,8 @@ model = ns.model(
 )
 
 
-options = {
-    'Viníferas': 'subopt_01',
-    'Americanas e híbridas': 'subopt_02',
-    'Uvas de mesa': 'subopt_03',
-    'Sem classificação': 'subopt_04'
-}
-
-
 # Request parser for query parameters
 parser = reqparse.RequestParser()
-parser.add_argument("subopcao", type=str, choices=list(options.keys()),
-                    required=False, default='Viníferas',
-                    help="Escolha uma subopção para filtrar os resultados.")
 parser.add_argument(
     "year",
     type=int,
@@ -66,8 +55,6 @@ class ProcessingResource(Resource):
         # Parse query parameters
         args = parser.parse_args()
         year = args.get("year", 2023)
-        sub_amigavel = args.get("subopcao")
-        sub_option = options.get(sub_amigavel)
 
         # Create filter and service
         product_filter = Filter()
@@ -75,5 +62,4 @@ class ProcessingResource(Resource):
 
         # Fetch and return products
         return service.get_all_products(year=year,
-                                        sub_option=sub_option,
                                         product_filter=product_filter)

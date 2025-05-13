@@ -5,7 +5,7 @@ from app.domain.entities.product import Product
 from app.domain.repositories.base_repository import BaseRepository
 
 class ProductionEmbrapaScraper(EmbrapaBaseScraper, BaseRepository):
-    def fetch_all(self, year: int, sub_option: str = None) -> List[Product]:
+    def fetch_all(self, year: int) -> List[Product]:
         url = f"{BASE_URL}?ano={year}&opcao=opt_02"
         response = self._fetch_page(url)
         soup = BeautifulSoup(response.text, "html.parser")

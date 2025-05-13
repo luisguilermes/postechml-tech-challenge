@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 
 class BaseRepository(ABC):
     @abstractmethod
-    def fetch_all(self, year: int, sub_option: str):
+    def fetch_all(self, year: int):
         pass
