@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Pylint
         run: |
-          pylint .
+          flake8 .
 
       - name: Run Pytest
         run: |
