@@ -14,5 +14,5 @@ class Category(BaseModel):
             "id": self.id,
             "name": self.name,
             "source": self.source,
-            "collected_at": self.collected_at,
+            "collected_at": self.collected_at.isoformat(),
         }
