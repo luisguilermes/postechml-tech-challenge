@@ -14,3 +14,4 @@ class ExportationEmbrapaScraper(EmbrapaBaseScraper, BaseRepository):
         soup = BeautifulSoup(response.text, "html.parser")
         table = self._find_table(soup)
         return self._parse_table(table, year)
+
