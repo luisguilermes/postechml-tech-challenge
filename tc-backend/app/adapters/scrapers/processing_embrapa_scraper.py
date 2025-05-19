@@ -71,16 +71,20 @@ def _parse_table(
     Faz o parsing da tabela de Processamento.
     """
     strings = list(tbody.stripped_strings)
-    grouped_data = [strings[i : i + 3] for i in range(0, len(strings), 3)]
+    grouped_data = [strings[i : i + 2] for i in range(0, len(strings), 2)]
 
     data = []
     collected_at = datetime.now(timezone.utc)
-
+    grow = None
     for group in grouped_data:
-        if len(group) < 3:
+        if len(group) < 2:
             continue
 
-        grow, sub_grow, amount = group
+        sub_grow, amount = group
+
+        if sub_grow.isupper():
+            grow = sub_grow
+            continue
         if grow == "Total":
             continue
         data.append(

@@ -9,7 +9,7 @@ class Processing(BaseModel):
     grow: str
     sub_grow: str
     amount: float
-    unit: str
+    amount_unit: str
     source: str
     collected_at: datetime
 
@@ -20,7 +20,7 @@ class Processing(BaseModel):
             "grow": self.grow,
             "sub_grow": self.sub_grow,
             "amount": self.amount,
-            "unit": self.unit,
+            "amount_unit": self.amount_unit,
             "source": self.source,
             "collected_at": self.collected_at.isoformat(),
         }

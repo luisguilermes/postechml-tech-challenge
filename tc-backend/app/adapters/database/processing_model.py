@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import Column, Integer, JSON
+from sqlalchemy import Column, Integer, String, JSON
 
 from app.adapters.database.database import Base
 from app.models.processing import Processing
@@ -12,7 +12,7 @@ class ProcessingModel(Base):
     __tablename__ = "tc_processing"
 
     year = Column(Integer, primary_key=True)
-    category_id = Column(Integer, primary_key=True)
+    category_id = Column(String, primary_key=True)
     data = Column(JSON)
 
     def from_dict(self) -> List[Processing]:
