@@ -115,7 +115,9 @@ class ImportingRepositoryImpl(ImportingRepository):
         else:
             # Cria novo
             importing_model = ImportingModel(
-                year=year, data=json.dumps([p.to_dict() for p in new_data])
+                year=year,
+                category_id=category_id,
+                data=json.dumps([p.to_dict() for p in new_data]),
             )
             self.db.add(importing_model)
 

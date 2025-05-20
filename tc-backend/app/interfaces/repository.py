@@ -41,6 +41,7 @@ class ImportingRepository(ABC):
         """Get imports by category and year"""
         pass
 
+
 class ProcessingRepository(ABC):
     @abstractmethod
     def fetch_categories(self) -> List[Category]:
