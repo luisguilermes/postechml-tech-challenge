@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from typing import List
 
 from app.models.category import Category
+from app.models.exporting import Exporting
 from app.models.importing import Importing
 from app.models.product import Product
 from app.models.processing import Processing
@@ -38,6 +39,20 @@ class ImportingRepository(ABC):
     def fetch_imports_by_category_and_year(
         self, category_id: str, year: int
     ) -> List[Importing]:
+        """Get imports by category and year"""
+        pass
+
+
+class ExportingRepository(ABC):
+    @abstractmethod
+    def fetch_categories(self) -> List[Category]:
+        """Get categories"""
+        pass
+
+    @abstractmethod
+    def fetch_imports_by_category_and_year(
+        self, category_id: str, year: int
+    ) -> List[Exporting]:
         """Get imports by category and year"""
         pass
 
