@@ -41,4 +41,4 @@ jobs:
           export_default_credentials: true
 
       - name: Deploy para o App Engine
-        run: gcloud app deploy --quiet
+        run: gcloud app deploy --quiet --verbosity=debug
