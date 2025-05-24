@@ -42,9 +42,9 @@ Este repositório contém duas aplicações principais:
   - ✅ Importação e Exportação
 - ✅ API RESTful para acesso estruturado aos dados
 - ✅ Documentação interativa via Swagger/OpenAPI
+- ✅ Autenticação com JWT
 - ⚙️ [Em desenvolvimento] Geração de previsões usando modelos de ML
 - ⚙️ [Em desenvolvimento] Armazenamento de previsões e dados históricos no banco
-- 🔐 [Planejado] Autenticação com JWT
 
 ### Frontend (`tc-frontend`)
 
@@ -92,11 +92,11 @@ O sistema é composto por:
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Backend**: Python, Flask, SQLAlchemy
+- **Backend**: Python, FastApi, SQLAlchemy
 - **Frontend**: React (JavaScript)
 - **Scraping**: BeautifulSoup, Requests
 - **Machine Learning**: Scikit-learn, Prophet, pandas
-- **Banco de Dados**: PostgreSQL
+- **Banco de Dados**: SQLite
 - **Documentação**: Swagger (Flasgger ou FastAPI Docs)
 
 ---
@@ -107,7 +107,6 @@ O sistema é composto por:
 
 - Python 3.10+
 - Node.js (para frontend)
-- PostgreSQL
 
 ### Backend
 
